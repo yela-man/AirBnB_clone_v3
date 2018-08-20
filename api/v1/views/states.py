@@ -7,7 +7,8 @@ from models.state import State
 @app_views.route('/states', methods=['GET', 'POST'])
 def all_states():
     if request.method == 'GET':
-        return jsonify([state.to_dict() for state in storage.all('State').values()])
+        return jsonify([state.to_dict()
+                        for state in storage.all('State').values()])
     if request.method == 'POST':
         if not request.json:
             abort(400, 'Not a JSON')
@@ -19,16 +20,27 @@ def all_states():
         new_State.save()
         return make_response(jsonify(new_State.to_dict()), 200)
 
-@app_views.route('/states/<state_id>', methods=['GET', 'DELETE'])
+@app_views.route('/states/<state_id>', methods=['GET', 'DELETE','PUT'])
 def state(state_id):
+
+    state = storage.get('State', state_id)
+
+    if not state:
+        abort(404)
+
     if request.method == 'GET':
-        state = storage.get('State', state_id)
-        if not state:
-            abort(404)
         return make_response(jsonify(state.to_dict()), 200)
 
     if request.method == 'DELETE':
-        state = storage.get('State', state_id)
         storage.delete(state)
         storage.save()
         return make_response(jsonify({}), 200)
+
+    if request.method == 'PUT':
+        if not request.json:
+            abort(400, "Not a JSON")
+        for key, value in request.json.items():
+            if not key in ["id", "created_at", "updated_at"]:
+                setattr(state, key, value)
+        state.save()
+        return make_response(jsonify(state.to_dict()), 200)
