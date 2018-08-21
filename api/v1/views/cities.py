@@ -13,7 +13,7 @@ def city(city_id):
         abort(404)
 
     if request.method == 'GET':
-        return jsonify([city.to_dict() for city in storage.all('City').values() if city_id == city.id])
+        return jsonify(city.to_dict())
 
     if request.method == 'DELETE':
         storage.delete(city)
