@@ -40,7 +40,7 @@ def reviews_by_place(place_id):
 
     if request.method == 'GET':
         return make_response(jsonify([review.to_dict()
-                                      for review in place.reviews), 200))
+                                      for review in place.reviews], 200))
 
     if request.method == 'POST':
         if not request.json:
