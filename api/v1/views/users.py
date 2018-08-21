@@ -13,8 +13,10 @@ def all_users():
     if request.method == 'POST':
         if not request.json:
             abort(400, 'Not a JSON')
-        if not 'name' in request.json:
-            abort(400, 'Missing name')
+        if 'email' not in request.json:
+            abort(400, "Missing email")
+        if 'password' not in request.json:
+            abort(400, "Missing password")
         new_User = User(**request.get_json())
         new_User.save()
         return make_response(jsonify(new_User.to_dict()), 201)
@@ -38,12 +40,8 @@ def user(user_id):
     if request.method == 'PUT':
         if not request.json:
             abort(400, "Not a JSON")
-        if email not in request.json:
-            abort(400, "Missing email")
-        if password not in request.json:
-            abort(400, "Missing password")
         for key, value in request.json.items():
-            if not key in ["id", "created_at", "updated_at"]:
+            if not key in ["id", "email", "created_at", "updated_at"]:
                 setattr(user, key, value)
         user.save()
         return make_response(jsonify(user.to_dict()), 200)

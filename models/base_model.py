@@ -8,7 +8,7 @@ from datetime import datetime
 import models
 from sqlalchemy import Column, String, Integer, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-
+import hashlib
 
 Base = declarative_base()
 
