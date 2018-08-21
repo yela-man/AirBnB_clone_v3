@@ -22,7 +22,7 @@ def all_users():
         return make_response(jsonify(new_User.to_dict()), 200)
 
 @app_views.route('/users/<user_id>', methods=['GET', 'DELETE','PUT'])
-def state(user_id):
+def user(user_id):
 
     user = storage.get('User', user_id)
 
