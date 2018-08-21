@@ -5,7 +5,7 @@ from models.state import State
 from models.city import City
 # index
 
-@app_views.route('/cities/<city_id>', methods=['GET', 'POST', 'DELETE', 'PUT'])
+@app_views.route('/cities/<city_id>', methods=['GET', 'DELETE', 'PUT'])
 
 def city(city_id):
     city = storage.get('City', city_id)
@@ -43,9 +43,7 @@ def cities_of_State(state_id):
             abort(400, 'Not a JSON')
         if not 'name' in request.json:
             abort(400, 'Missing name')
-        new = request.get_json()
-        new_city = City()
-        new_city.name = new
+        new_city = City(**request.get_json())
         new_city.state_id = state.id
         new_city.save()
         return make_response(jsonify(new_city.to_dict()), 200)

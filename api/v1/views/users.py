@@ -15,9 +15,7 @@ def all_users():
             abort(400, 'Not a JSON')
         if not 'name' in request.json:
             abort(400, 'Missing name')
-        new = request.get_json()
-        new_User = User()
-        new_User.name = new
+        new_User = User(**request.get_json())
         new_User.save()
         return make_response(jsonify(new_User.to_dict()), 200)
 
