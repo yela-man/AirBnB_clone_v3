@@ -8,6 +8,7 @@ from flasgger import Swagger
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "0.0.0.0"}})
 app.url_map.strict_slashes=False
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.register_blueprint(app_views)
 swagger = Swagger(app)
 
