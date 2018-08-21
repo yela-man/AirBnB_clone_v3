@@ -46,4 +46,4 @@ def cities_of_State(state_id):
         new_city = City(**request.get_json())
         new_city.state_id = state.id
         new_city.save()
-        return make_response(jsonify(new_city.to_dict()), 200)
+        return make_response(jsonify(new_city.to_dict()), 201)

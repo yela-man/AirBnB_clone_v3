@@ -16,7 +16,7 @@ def all_states():
             abort(400, 'Missing name')
         new_State = State(**request.get_json())
         new_State.save()
-        return make_response(jsonify(new_State.to_dict()), 200)
+        return make_response(jsonify(new_State.to_dict()), 201)
 
 @app_views.route('/states/<state_id>', methods=['GET', 'DELETE','PUT'])
 def state(state_id):

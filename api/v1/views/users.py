@@ -17,7 +17,7 @@ def all_users():
             abort(400, 'Missing name')
         new_User = User(**request.get_json())
         new_User.save()
-        return make_response(jsonify(new_User.to_dict()), 200)
+        return make_response(jsonify(new_User.to_dict()), 201)
 
 @app_views.route('/users/<user_id>', methods=['GET', 'DELETE','PUT'])
 def user(user_id):
@@ -46,4 +46,4 @@ def user(user_id):
             if not key in ["id", "created_at", "updated_at"]:
                 setattr(user, key, value)
         user.save()
-        return make_response(jsonify(user.to_dict()), 201)
+        return make_response(jsonify(user.to_dict()), 200)
