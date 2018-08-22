@@ -59,5 +59,5 @@ def reviews_by_place(place_id):
         if not user_id:
             abort(404)
         new_Review.place_id = place.id
-        new_State.save()
-        return make_response(jsonify(new_State.to_dict()), 201)
+        new_Review.save()
+        return make_response(jsonify(new_Review.to_dict()), 201)
