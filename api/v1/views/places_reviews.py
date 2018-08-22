@@ -9,20 +9,47 @@ from models.state import State
 from models.review import Review
 
 
+@app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'])
+def reviews_by_place(place_id):
+
+    place = storage.get('Place', place_id)
+    if place is None:
+        abort(404)
+
+    if request.method == 'GET':
+        return jsonify([review.to_dict()
+                        for review in place.reviews]), 200
+
+    if request.method == 'POST':
+        if not request.get_json():
+            abort(400, 'Not a JSON')
+        if 'user_id' not in request.get_json():
+            abort(400, 'Missing user_id')
+        if 'text' not in request.get_json():
+            abort(400, 'Missing text')
+        new_Review = Review(**request.get_json())
+        new_Review.place_id = place_id
+        user_id = storage.get('User', newReview.user_id)
+        if not user_id:
+            abort(404)
+        new_Review.save()
+        return jsonify(new_Review.to_dict()), 201
+
+
 @app_views.route('/reviews/<review_id>', methods=['GET', 'DELETE', 'PUT'])
 def review(review_id):
 
     review = storage.get('Review', review_id)
-    if not review:
+    if review is None:
         abort(404)
 
     if request.method == 'GET':
-        return make_response(jsonify(review.to_dict()), 200)
+        return jsonify(review.to_dict()), 200
 
     if request.method == 'DELETE':
         storage.delete(review)
         storage.save()
-        return make_response(jsonify({}), 200)
+        return jsonify({}), 200
 
     if request.method == 'PUT':
         if not request.get_json():
@@ -32,32 +59,4 @@ def review(review_id):
                            "created_at", "updated_at"]:
                 setattr(review, key, value)
         review.save()
-        return make_response(jsonify(review.to_dict()), 200)
-
-
-@app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'])
-def reviews_by_place(place_id):
-
-    place = storage.get('Place', place_id)
-    if not place:
-        abort(404)
-
-    if request.method == 'GET':
-        return make_response(jsonify([review.to_dict()
-                                      for review in place.reviews], 200))
-
-    if request.method == 'POST':
-        if not request.get_json():
-            abort(400, 'Not a JSON')
-        if 'user_id' not in request.get_json():
-            abort(400, 'Missing user_id')
-        if 'text' not in request.get_json():
-            abort(400, 'Missing text')
-        user_id = request.get_json.get('user_id')
-        user_id = storage.get('User', user_id)
-        if not user_id:
-            abort(404)
-        new_Review = Review(**request.get_json())
-        new_Review.place_id = place.id
-        new_Review.save()
-        return make_response(jsonify(new_Review.to_dict()), 201)
+        return jsonify(review.to_dict()), 200
