@@ -21,7 +21,7 @@ class FileStorage:
         if cls is None:
             return self.__objects
 
-        if cls != None:
+        if cls is not None:
             for k, v in self.__objects.items():
                 if cls == k.split(".")[0]:
                     new_dict[k] = v

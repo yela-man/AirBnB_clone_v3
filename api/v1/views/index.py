@@ -7,6 +7,7 @@ from flask import Flask, jsonify, make_response
 from api.v1.views import app_views
 from models import storage
 
+
 @app_views.route('/status')
 def getStatus():
     return jsonify({'status': 'OK'})
