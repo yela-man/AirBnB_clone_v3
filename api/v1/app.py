@@ -19,7 +19,7 @@ swagger = Swagger(app)
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return make_response(jsonify({"error": "Not found"}), 404)
+    return jsonify({"error": "Not found"}), 404
 
 
 @app.teardown_appcontext
