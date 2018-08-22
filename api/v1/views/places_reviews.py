@@ -39,7 +39,6 @@ def review(review_id):
 def reviews_by_place(place_id):
 
     place = storage.get('Place', place_id)
-
     if not place:
         abort(404)
 
@@ -54,10 +53,11 @@ def reviews_by_place(place_id):
             abort(400, 'Missing user_id')
         if 'text' not in request.get_json():
             abort(400, 'Missing text')
-        new_Review = Review(**request.get_json())
-        user_id = storage.get('User', new_Review.user_id)
+        user_id = request.get_json.get('user_id')
+        user_id = storage.get('User', user_id)
         if not user_id:
             abort(404)
+        new_Review = Review(**request.get_json())
         new_Review.place_id = place.id
         new_Review.save()
         return make_response(jsonify(new_Review.to_dict()), 201)
