@@ -32,7 +32,7 @@ class User(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         if kwargs:
             encrypt = kwargs.pop('password', None)
-        User.set_password(self, encrypt)
+            User.set_password(self, encrypt)
         super().__init__(*args, **kwargs)
 
     def set_password(self, _password):
