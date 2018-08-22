@@ -26,9 +26,9 @@ def getplace(place_id):
         return jsonify({}), 200
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.get_json():
             abort(400, "Not a JSON")
-        for key, value in request.json.items():
+        for key, value in request.get_json().items():
             if key not in ["user_id", "city_id",
                            "id", "created_at", "updated_at"]:
                 setattr(place, key, value)
@@ -51,22 +51,22 @@ def places(city_id):
         return make_response(jsonify({}), 200)
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.get_json():
             abort(400, "Not a JSON")
-        for key, value in request.json.items():
+        for key, value in request.get_json().items():
             if key not in ["id", "created_at", "updated_at"]:
                 setattr(city, key, value)
         city.save()
         return make_response(jsonify(city.to_dict()), 200)
 
     if request.method == 'POST':
-        if not request.json:
+        if not request.get_json():
             abort(400, 'Not a JSON')
-        if 'user_id' not in request.json:
+        if 'user_id' not in request.get_json():
             abort(400, 'Missing user_id')
-        if not storage.get('User', request.json['user_id']):
+        if not storage.get('User', request.get_json()['user_id']):
             abort(404)
-        if 'name' not in request.json:
+        if 'name' not in request.get_json():
             abort(400, 'Missing name')
         new_place = Place(**request.get_json())
         new_place.city_id = city_id
