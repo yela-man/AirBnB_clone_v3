@@ -33,7 +33,7 @@ def getplace(place_id):
                            "id", "created_at", "updated_at"]:
                 setattr(place, key, value)
         place.save()
-        return jsonify(city.to_dict()), 200
+        return jsonify(place.to_dict()), 200
 
 
 @app_views.route('/cities/<city_id>/places', methods=['GET', 'POST'])
