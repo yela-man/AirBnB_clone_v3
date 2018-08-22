@@ -2,7 +2,7 @@
 '''
 places handler
 '''
-from flask import Flask, make_response, request, jsonify, abort
+from flask import Flask, request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
 from models.city import City
@@ -23,7 +23,7 @@ def getplace(place_id):
     if request.method == 'DELETE':
         storage.delete(place)
         storage.save()
-        return make_response(jsonify({}), 200)
+        return jsonify({}), 200
 
     if request.method == 'PUT':
         if not request.json:
@@ -33,7 +33,7 @@ def getplace(place_id):
                            "id", "created_at", "updated_at"]:
                 setattr(place, key, value)
         place.save()
-        return make_response(jsonify(city.to_dict()), 200)
+        return jsonify(city.to_dict()), 200
 
 
 @app_views.route('/cities/<city_id>/places', methods=['GET', 'POST', 'PUT'])
