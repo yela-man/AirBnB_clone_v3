@@ -11,14 +11,14 @@ from models.place import Place
 
 @app_views.route('/places/<place_id>', methods=['GET', 'DELETE', 'PUT'])
 def getplace(place_id):
-
+    """ gets a place"""
     place = storage.get('Place', place_id)
 
     if not place:
         abort(404)
 
     if request.method == 'GET':
-        return jsonify(place.to_dict())
+        return jsonify(place.to_dict()), 200
 
     if request.method == 'DELETE':
         storage.delete(place)
@@ -38,17 +38,13 @@ def getplace(place_id):
 
 @app_views.route('/cities/<city_id>/places', methods=['GET', 'POST'])
 def places(city_id):
+    """gets places"""
     city = storage.get('City', city_id)
     if not city:
         abort(404)
 
     if request.method == 'GET':
         return jsonify([place.to_dict() for place in city.places])
-
-    if request.method == 'DELETE':
-        storage.delete(city)
-        storage.save()
-        return jsonify({}), 200
 
     if request.method == 'POST':
         if not request.get_json():
