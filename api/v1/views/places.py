@@ -18,7 +18,7 @@ def getplace(place_id):
         abort(404)
 
     if request.method == 'GET':
-        return jsonify(place.to_dict())
+        return jsonify(place.to_dict()), 200
 
     if request.method == 'DELETE':
         storage.delete(place)
@@ -44,11 +44,6 @@ def places(city_id):
 
     if request.method == 'GET':
         return jsonify([place.to_dict() for place in city.places])
-
-    if request.method == 'DELETE':
-        storage.delete(city)
-        storage.save()
-        return jsonify({}), 200
 
     if request.method == 'POST':
         if not request.get_json():
