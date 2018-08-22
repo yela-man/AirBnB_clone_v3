@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from flask import Flask, render_template, abort, make_response, jsonify
 from flask_cors import CORS
 from models import storage
