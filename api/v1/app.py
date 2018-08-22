@@ -30,4 +30,4 @@ def close(exception):
 if __name__ == "__main__":
     apiHost = getenv("HBNB_API_HOST", default="0.0.0.0")
     apiPort = getenv("HBNB_API_PORT", default=5000)
-    app.run(host=apiHost, port=apiPort, threaded=True)
+    app.run(host=apiHost, port=int(apiPort), threaded=True)
