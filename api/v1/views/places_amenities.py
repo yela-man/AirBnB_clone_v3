@@ -1,4 +1,4 @@
-#!/usr/bin/pytyon3
+#!/usr/bin/python3
 '''
 place amenities
 '''
