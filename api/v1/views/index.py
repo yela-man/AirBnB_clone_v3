@@ -9,7 +9,7 @@ from models import storage
 
 @app_views.route('/status')
 def getStatus():
-    return jsonify({'status': 'OK'}), 200
+    return jsonify({'status': 'OK'})
 
 
 @app_views.route('/stats')
@@ -23,4 +23,4 @@ def getCount():
 
     for k in count_dict.keys():
         count_dict[k] = storage.count(count_dict.get(k))
-    return jsonify(count_dict), 200
+    return jsonify(count_dict)
