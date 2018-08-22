@@ -1,10 +1,13 @@
 #!/usr/bin/python3
+'''
+places_reviews handler
+'''
 from flask import Flask, make_response, request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
 from models.state import State
 from models.review import Review
-# index
+
 
 @app_views.route('/reviews/<review_id>', methods=['GET', 'DELETE', 'PUT'])
 def review(review_id):
@@ -25,11 +28,12 @@ def review(review_id):
         if not request.json:
             abort(400, "Not a JSON")
         for key, value in request.json.items():
-            if not key in ["id", "user_id", "place_id",
+            if key not in ["id", "user_id", "place_id",
                            "created_at", "updated_at"]:
                 setattr(review, key, value)
         review.save()
         return make_response(jsonify(review.to_dict()), 200)
+
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'])
 def reviews_by_place(place_id):
@@ -46,9 +50,9 @@ def reviews_by_place(place_id):
     if request.method == 'POST':
         if not request.json:
             abort(400, 'Not a JSON')
-        if not 'user_id' in request.json:
+        if 'user_id' not in request.json:
             abort(400, 'Missing user_id')
-        if not 'text' in request.json:
+        if 'text' not in request.json:
             abort(400, 'Missing text')
         new_Review = Review(**request.get_json())
         user_id = storage.get('User', new_Review.user_id)
