@@ -8,7 +8,6 @@ from models.place import Place
 
 
 @app_views.route('/places/<place_id>', methods=['GET', 'DELETE'])
-
 def getplace(place_id):
 
     place = storage.get('Place', place_id)
@@ -28,7 +27,7 @@ def getplace(place_id):
         if not request.json:
             abort(400, "Not a JSON")
         for key, value in request.json.items():
-            if not key in ["user_id", "city_id",
+            if key not in ["user_id", "city_id",
                            "id", "created_at", "updated_at"]:
                 setattr(place, key, value)
         place.save()
@@ -36,7 +35,6 @@ def getplace(place_id):
 
 
 @app_views.route('/cities/<city_id>/places', methods=['GET', 'POST', 'PUT'])
-
 def places(city_id):
     city = storage.get('City', city_id)
     if not city:
@@ -54,7 +52,7 @@ def places(city_id):
         if not request.json:
             abort(400, "Not a JSON")
         for key, value in request.json.items():
-            if not key in ["id", "created_at", "updated_at"]:
+            if key not in ["id", "created_at", "updated_at"]:
                 setattr(city, key, value)
         city.save()
         return make_response(jsonify(city.to_dict()), 200)
@@ -62,11 +60,11 @@ def places(city_id):
     if request.method == 'POST':
         if not request.json:
             abort(400, 'Not a JSON')
-        if not 'user_id' in request.json:
+        if 'user_id' not in request.json:
             abort(400, 'Missing user_id')
         if not storage.get('User', request.json['user_id']):
             abort(404)
-        if not name in request.json:
+        if 'name' not in request.json:
             abort(400, 'Missing name')
         new_place = Place(**request.get_json())
         new_place.city_id = city_id
