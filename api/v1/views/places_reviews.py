@@ -25,9 +25,9 @@ def review(review_id):
         return make_response(jsonify({}), 200)
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.get_json():
             abort(400, "Not a JSON")
-        for key, value in request.json.items():
+        for key, value in request.get_json.items():
             if key not in ["id", "user_id", "place_id",
                            "created_at", "updated_at"]:
                 setattr(review, key, value)
@@ -48,11 +48,11 @@ def reviews_by_place(place_id):
                                       for review in place.reviews], 200))
 
     if request.method == 'POST':
-        if not request.json:
+        if not request.get_json():
             abort(400, 'Not a JSON')
-        if 'user_id' not in request.json:
+        if 'user_id' not in request.get_json():
             abort(400, 'Missing user_id')
-        if 'text' not in request.json:
+        if 'text' not in request.get_json():
             abort(400, 'Missing text')
         new_Review = Review(**request.get_json())
         user_id = storage.get('User', new_Review.user_id)
