@@ -11,14 +11,14 @@ from models.review import Review
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET', 'POST'])
 def reviews_by_place(place_id):
-
+    """reviews by place"""
     place = storage.get('Place', place_id)
     if place is None:
         abort(404)
 
     if request.method == 'GET':
         return jsonify([review.to_dict()
-                        for review in place.reviews]), 200
+                        for review in place.reviews])
 
     if request.method == 'POST':
         if not request.get_json():
@@ -27,11 +27,10 @@ def reviews_by_place(place_id):
             abort(400, 'Missing user_id')
         if 'text' not in request.get_json():
             abort(400, 'Missing text')
+        if not storage.get('User', request.get_json()['user_id']):
+            abort(404)
         new_Review = Review(**request.get_json())
         new_Review.place_id = place_id
-        user_id = storage.get('User', newReview.user_id)
-        if not user_id:
-            abort(404)
         new_Review.save()
         return jsonify(new_Review.to_dict()), 201
 
