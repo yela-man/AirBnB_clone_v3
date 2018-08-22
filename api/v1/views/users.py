@@ -4,7 +4,7 @@ from api.v1.views import app_views
 from models import storage
 from models.state import State
 from models.user import User
-# index
+
 
 @app_views.route('/users', methods=['GET', 'POST'])
 def all_users():
@@ -22,7 +22,8 @@ def all_users():
         new_User.save()
         return make_response(jsonify(new_User.to_dict()), 201)
 
-@app_views.route('/users/<user_id>', methods=['GET', 'DELETE','PUT'])
+
+@app_views.route('/users/<user_id>', methods=['GET', 'DELETE', 'PUT'])
 def user(user_id):
 
     user = storage.get('User', user_id)
@@ -42,7 +43,7 @@ def user(user_id):
         if not request.json:
             abort(400, "Not a JSON")
         for key, value in request.json.items():
-            if not key in ["id", "email", "created_at", "updated_at"]:
+            if key not in ["id", "email", "created_at", "updated_at"]:
                 setattr(user, key, value)
         user.save()
         return make_response(jsonify(user.to_dict()), 200)
