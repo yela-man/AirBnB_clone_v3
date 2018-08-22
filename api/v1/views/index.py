@@ -1,11 +1,16 @@
 #!/usr/bin/python3
+'''
+index page for flask
+displays status and stats
+'''
 from flask import Flask, jsonify, make_response
 from api.v1.views import app_views
-# index
+
 
 @app_views.route('/status', methods=['GET'])
 def getStatus():
-    return make_response(jsonify({'status':'OK'}), 200)
+    return make_response(jsonify({'status': 'OK'}), 200)
+
 
 @app_views.route('/stats', methods=['GET'])
 def getCount():
