@@ -28,6 +28,6 @@ def close(exception):
 
 
 if __name__ == "__main__":
-    apiHost = getenv("HBNB_API_HOST") or "0.0.0.0"
-    apiPort = getenv("HBNB_API_PORT") or 5000
+    apiHost = getenv("HBNB_API_HOST", default="0.0.0.0")
+    apiPort = getenv("HBNB_API_PORT", default=5000)
     app.run(host=apiHost, port=apiPort, threaded=True)
