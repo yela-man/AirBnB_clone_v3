@@ -2,7 +2,7 @@
 '''
 places handler
 '''
-from flask import Flask, make_response, request, jsonify, abort
+from flask import Flask, request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
 from models.city import City
@@ -23,17 +23,17 @@ def getplace(place_id):
     if request.method == 'DELETE':
         storage.delete(place)
         storage.save()
-        return make_response(jsonify({}), 200)
+        return jsonify({}), 200
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.get_json():
             abort(400, "Not a JSON")
-        for key, value in request.json.items():
+        for key, value in request.get_json().items():
             if key not in ["user_id", "city_id",
                            "id", "created_at", "updated_at"]:
                 setattr(place, key, value)
         place.save()
-        return make_response(jsonify(city.to_dict()), 200)
+        return jsonify(city.to_dict()), 200
 
 
 @app_views.route('/cities/<city_id>/places', methods=['GET', 'POST', 'PUT'])
@@ -51,22 +51,22 @@ def places(city_id):
         return make_response(jsonify({}), 200)
 
     if request.method == 'PUT':
-        if not request.json:
+        if not request.get_json():
             abort(400, "Not a JSON")
-        for key, value in request.json.items():
+        for key, value in request.get_json().items():
             if key not in ["id", "created_at", "updated_at"]:
                 setattr(city, key, value)
         city.save()
         return make_response(jsonify(city.to_dict()), 200)
 
     if request.method == 'POST':
-        if not request.json:
+        if not request.get_json():
             abort(400, 'Not a JSON')
-        if 'user_id' not in request.json:
+        if 'user_id' not in request.get_json():
             abort(400, 'Missing user_id')
-        if not storage.get('User', request.json['user_id']):
+        if not storage.get('User', request.get_json()['user_id']):
             abort(404)
-        if 'name' not in request.json:
+        if 'name' not in request.get_json():
             abort(400, 'Missing name')
         new_place = Place(**request.get_json())
         new_place.city_id = city_id

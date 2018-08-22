@@ -2,7 +2,7 @@
 '''
 cities path handler
 '''
-from flask import Flask, make_response, request, jsonify, abort
+from flask import request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
 from models.state import State
@@ -22,7 +22,7 @@ def city(city_id):
     if request.method == 'DELETE':
         storage.delete(city)
         storage.save()
-        return make_response(jsonify({}), 200)
+        return jsonify({}), 200
 
     if request.method == 'PUT':
         if not request.json:
@@ -31,7 +31,7 @@ def city(city_id):
             if key not in ["id", "created_at", "updated_at"]:
                 setattr(city, key, value)
         city.save()
-        return make_response(jsonify(city.to_dict()), 200)
+        return jsonify(city.to_dict()), 200
 
 
 @app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'])
@@ -51,4 +51,4 @@ def cities_of_State(state_id):
         new_city = City(**request.get_json())
         new_city.state_id = state.id
         new_city.save()
-        return make_response(jsonify(new_city.to_dict()), 201)
+        return jsonify(new_city.to_dict()), 201
