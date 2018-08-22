@@ -2,14 +2,14 @@
 '''
 places handler
 '''
-from flask import Flask, request, jsonify, abort
+from flask import request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
 from models.city import City
 from models.place import Place
 
 
-@app_views.route('/places/<place_id>', methods=['GET', 'DELETE'])
+@app_views.route('/places/<place_id>', methods=['GET', 'DELETE', 'PUT'])
 def getplace(place_id):
 
     place = storage.get('Place', place_id)
@@ -33,10 +33,10 @@ def getplace(place_id):
                            "id", "created_at", "updated_at"]:
                 setattr(place, key, value)
         place.save()
-        return jsonify(city.to_dict()), 200
+        return jsonify(place.to_dict()), 200
 
 
-@app_views.route('/cities/<city_id>/places', methods=['GET', 'POST', 'PUT'])
+@app_views.route('/cities/<city_id>/places', methods=['GET', 'POST'])
 def places(city_id):
     city = storage.get('City', city_id)
     if not city:
@@ -48,16 +48,7 @@ def places(city_id):
     if request.method == 'DELETE':
         storage.delete(city)
         storage.save()
-        return make_response(jsonify({}), 200)
-
-    if request.method == 'PUT':
-        if not request.get_json():
-            abort(400, "Not a JSON")
-        for key, value in request.get_json().items():
-            if key not in ["id", "created_at", "updated_at"]:
-                setattr(city, key, value)
-        city.save()
-        return make_response(jsonify(city.to_dict()), 200)
+        return jsonify({}), 200
 
     if request.method == 'POST':
         if not request.get_json():
@@ -71,4 +62,4 @@ def places(city_id):
         new_place = Place(**request.get_json())
         new_place.city_id = city_id
         new_place.save()
-        return make_response(jsonify(new_place.to_dict()), 201)
+        return jsonify(new_place.to_dict()), 201
