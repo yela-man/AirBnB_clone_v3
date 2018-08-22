@@ -1,10 +1,14 @@
-#!/usr/bin/pytyon3
+#!/usr/bin/python3
+'''
+place amenities
+'''
 from flask import Flask, make_response, request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
 from models.amenity import Amenity
 from os import getenv
 # index
+
 
 @app_views.route('places/<place_id>/amenities', methods=['GET'])
 def place_allamens(place_id):
@@ -16,8 +20,9 @@ def place_allamens(place_id):
                   else place.amenities())
     return jsonify([place.to_dict() for place in placeAmens])
 
+
 @app_views.route('places/<place_id>/amenities/<amenity_id>',
-                 methods=['DELETE','POST'])
+                 methods=['DELETE', 'POST'])
 def place_amenity(place_id, amenity_id):
 
     amen = storage.get('Amenity', amenity_id)

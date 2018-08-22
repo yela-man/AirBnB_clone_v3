@@ -15,7 +15,8 @@ def all_users():
         return jsonify([user.to_dict()
                         for user in storage.all('User').values()])
     if request.method == 'POST':
-        if not request.json:
+
+        if not request.get_json():
             abort(400, 'Not a JSON')
         if 'email' not in request.get_json():
             abort(400, "Missing email")
@@ -23,6 +24,7 @@ def all_users():
             abort(400, "Missing password")
         new_User = User(**request.get_json())
         new_User.save()
+
         return make_response(jsonify(new_User.to_dict()), 201)
 
 
