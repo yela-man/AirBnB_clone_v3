@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+'''
+cities path handler
+'''
 from flask import Flask, make_response, request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
@@ -6,8 +9,8 @@ from models.state import State
 from models.city import City
 # index
 
-@app_views.route('/cities/<city_id>', methods=['GET', 'DELETE', 'PUT'])
 
+@app_views.route('/cities/<city_id>', methods=['GET', 'DELETE', 'PUT'])
 def city(city_id):
     city = storage.get('City', city_id)
     if not city:
@@ -25,10 +28,11 @@ def city(city_id):
         if not request.json:
             abort(400, "Not a JSON")
         for key, value in request.json.items():
-            if not key in ["id", "created_at", "updated_at"]:
+            if key not in ["id", "created_at", "updated_at"]:
                 setattr(city, key, value)
         city.save()
         return make_response(jsonify(city.to_dict()), 200)
+
 
 @app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'])
 def cities_of_State(state_id):
@@ -42,7 +46,7 @@ def cities_of_State(state_id):
     if request.method == 'POST':
         if not request.json:
             abort(400, 'Not a JSON')
-        if not 'name' in request.json:
+        if 'name' not in request.json:
             abort(400, 'Missing name')
         new_city = City(**request.get_json())
         new_city.state_id = state.id
