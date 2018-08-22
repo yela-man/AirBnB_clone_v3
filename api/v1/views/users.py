@@ -17,9 +17,9 @@ def all_users():
     if request.method == 'POST':
         if not request.json:
             abort(400, 'Not a JSON')
-        if 'email' not in request.json:
+        if 'email' not in request.get_json():
             abort(400, "Missing email")
-        if 'password' not in request.json:
+        if 'password' not in request.get_json():
             abort(400, "Missing password")
         new_User = User(**request.get_json())
         new_User.save()
@@ -45,7 +45,7 @@ def user(user_id):
     if request.method == 'PUT':
         if not request.json:
             abort(400, "Not a JSON")
-        for key, value in request.json.items():
+        for key, value in request.get_json().items():
             if key not in ["id", "email", "created_at", "updated_at"]:
                 setattr(user, key, value)
         user.save()
