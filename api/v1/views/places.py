@@ -1,10 +1,12 @@
 #!/usr/bin/python3
+'''
+places handler
+'''
 from flask import Flask, make_response, request, jsonify, abort
 from api.v1.views import app_views
 from models import storage
 from models.city import City
 from models.place import Place
-# index
 
 
 @app_views.route('/places/<place_id>', methods=['GET', 'DELETE'])
