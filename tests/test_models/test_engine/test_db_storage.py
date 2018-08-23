@@ -75,7 +75,7 @@ class test_DBStorage(unittest.TestCase):
             Testing all function
         '''
         storage.reload()
-        result = storage.all("")
+        result = storage.all(None)
         self.assertIsInstance(result, dict)
         self.assertEqual(len(result), 0)
         new = User(email="adriel@hbtn.com", password="abc")
@@ -132,7 +132,7 @@ class test_DBStorage(unittest.TestCase):
     def test_count_db_storage(self):
         """This test the get method in db_storage"""
         storage.reload()
-        result = storage.all("")
+        result = storage.all(None)
         count = storage.count(None)
         self.assertEqual(len(result), count)
         result = storage.all("State")
