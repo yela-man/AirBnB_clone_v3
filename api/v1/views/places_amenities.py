@@ -9,7 +9,6 @@ from models.amenity import Amenity
 from os import getenv
 # index
 
-
 @app_views.route('places/<place_id>/amenities', methods=['GET'])
 def place_allamens(place_id):
     place = storage.get('Place', place_id)
@@ -31,18 +30,13 @@ def place_amenity(place_id, amenity_id):
     if request.method == 'DELETE':
         if amen not in place.amenities:
             abort(404)
-        if getenv("HBNB_TYPE_STORAGE") == "fs":
-            if amen.id in place.amenity_ids:
-                del place.amenity_ids[amen.id]
         storage.delete(amen)
         storage.save()
         return make_response(jsonify({}), 200)
 
     if request.method == 'POST':
         if amen not in place.amenities:
-            if getenv("HBNB_TYPE_STORAGE") == "fs":
-                place.amenity_ids.append(amen.id)
-            else:
-                place.amenities.append(amen)
+            place.amenities.append(amen)
             place.save()
-        return make_response(jsonify(amen.to_dict()), 201)
+            return make_response(jsonify(amen.to_dict()), 201)
+        return jsonify(amen.to_dict()), 200
