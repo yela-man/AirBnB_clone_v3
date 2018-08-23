@@ -13,6 +13,8 @@ def place_allamens(place_id):
     place = storage.get('Place', place_id)
     if not place:
         abort(404)
+    if not place.amenities:
+        return jsonify([])
     return jsonify([amen.to_dict() for amen in place.amenities])
 
 
