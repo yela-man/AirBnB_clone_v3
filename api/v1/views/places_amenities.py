@@ -8,7 +8,7 @@ from models import storage
 from models.amenity import Amenity
 from os import getenv
 # index
-@app_views.route('places/<place_id>/amenities', methods=['GET'])
+@app_views.route('/places/<place_id>/amenities', methods=['GET'])
 def place_allamens(place_id):
     place = storage.get('Place', place_id)
     if not place:
@@ -18,7 +18,7 @@ def place_allamens(place_id):
     return jsonify([amen.to_dict() for amen in place.amenities])
 
 
-@app_views.route('places/<place_id>/amenities/<amenity_id>',
+@app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  methods=['DELETE', 'POST'])
 def place_amenity(place_id, amenity_id):
     amen = storage.get('Amenity', amenity_id)
