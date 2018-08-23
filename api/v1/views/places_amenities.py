@@ -15,10 +15,8 @@ def place_allamens(place_id):
     place = storage.get('Place', place_id)
     if not place:
         abort(404)
-    placeAmens = (place.amenities
-                  if getenv("HBNB_TYPE_STORAGE") == "db"
-                  else place.amenities())
-    return jsonify([place.to_dict() for place in placeAmens])
+
+    return jsonify([amen.to_dict() for amen in place.amenities])
 
 
 @app_views.route('places/<place_id>/amenities/<amenity_id>',
@@ -30,21 +28,18 @@ def place_amenity(place_id, amenity_id):
     if not amen or not place:
         abort(404)
 
-    placeAmens = (place.amenities
-                  if getenv("HBNB_TYPE_STORAGE") == "db"
-                  else place.amenities())
-
     if request.method == 'DELETE':
-        if amen not in placeAmens:
+        if amen not in place.amenities:
             abort(404)
         if getenv("HBNB_TYPE_STORAGE") == "fs":
-            del place.amenity_ids[amen.id]
+            if amen.id in place.amenity_ids:
+                del place.amenity_ids[amen.id]
         storage.delete(amen)
         storage.save()
         return make_response(jsonify({}), 200)
 
     if request.method == 'POST':
-        if amen not in placeAmens:
+        if amen not in place.amenities:
             if getenv("HBNB_TYPE_STORAGE") == "fs":
                 place.amenity_ids.append(amen.id)
             else:
