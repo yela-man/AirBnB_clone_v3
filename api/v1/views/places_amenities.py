@@ -31,11 +31,11 @@ def place_amenity(place_id, amenity_id):
             abort(404)
         storage.delete(amen)
         storage.save()
-        return make_response(jsonify({}), 200)
+        return jsonify({}), 200
 
     if request.method == 'POST':
         if amen not in place.amenities:
             place.amenities.append(amen)
             place.save()
-            return make_response(jsonify(amen.to_dict()), 201)
+            return jsonify(amen.to_dict()), 201
         return jsonify(amen.to_dict()), 200
