@@ -140,7 +140,7 @@ class testFileStorage(unittest.TestCase):
     def test_count_file_storage(self):
         """This test the get method in file_storage"""
         storage.reload()
-        result = storage.all("")
+        result = storage.all(None)
         count = storage.count(None)
         self.assertEqual(len(result), count)
         result = storage.all("State")
