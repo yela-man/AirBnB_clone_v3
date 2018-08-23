@@ -21,7 +21,6 @@ def place_allamens(place_id):
 @app_views.route('places/<place_id>/amenities/<amenity_id>',
                  methods=['DELETE', 'POST'])
 def place_amenity(place_id, amenity_id):
-
     amen = storage.get('Amenity', amenity_id)
     place = storage.get('Place', place_id)
     if not amen or not place:
