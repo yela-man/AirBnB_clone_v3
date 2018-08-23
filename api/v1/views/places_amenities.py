@@ -37,5 +37,5 @@ def place_amenity(place_id, amenity_id):
         if amen not in place.amenities:
             place.amenities.append(amen)
             place.save()
-            return jsonify(amen.to_dict()), 201
-        return jsonify(amen.to_dict()), 200
+            return jsonify(amen.to_dict()), 200
+        return jsonify(amen.to_dict()), 201
