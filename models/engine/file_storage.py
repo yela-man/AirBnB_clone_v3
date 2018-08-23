@@ -34,9 +34,11 @@ class FileStorage:
             Retrieves one object if exists
         '''
         cls_dict = self.all(cls)
-        id = cls + '.' + id
-        obj = cls_dict.get(id)
-        return(obj)
+        for k, v in cls_dict.items():
+            obj = cls + '.' + id
+            if k == obj:
+                return(v)
+        return(None)
 
     def count(self, cls=None):
         '''
