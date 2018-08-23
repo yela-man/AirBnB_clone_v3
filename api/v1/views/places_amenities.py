@@ -39,7 +39,7 @@ def place_amenity(place_id, amenity_id):
         return make_response(jsonify({}), 200)
 
     if request.method == 'POST':
-        if amen not in placeAmens:
+        if amen not in place.amenities:
             if getenv("HBNB_TYPE_STORAGE") == "fs":
                 place.amenity_ids.append(amen.id)
             else:
