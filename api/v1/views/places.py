@@ -64,17 +64,15 @@ def places(city_id):
 def places_search():
 
     if not request.get_json():
+        abort(400, 'Not a JSON')
+
+    if request.get_json() == []:
         return jsonify([places.to_dict() for
                         places in storage.all('Place').values()])
-
 
     res = []
     places = []
     amenities = []
-
-    if not request.get_json():
-        abort(400, 'Not a JSON')
-
     obj = request.get_json()
     for k, v in obj.items():
         if k == 'states':
@@ -98,7 +96,11 @@ def places_search():
         if place.city_id in res:
             places.append(place.id)
 
-    if amenities is not []:
+    if places == [] and amenities is not []:
+        return jsonify([storage.get('Amenity', id).to_dict()
+                        for id in amenities])
+
+    else:
         for place in places:
             obj = storage.get('Place', place)
             for amenity in amenities:
