@@ -8,6 +8,8 @@ from models import storage
 from models.amenity import Amenity
 from os import getenv
 # index
+
+
 @app_views.route('/places/<place_id>/amenities', methods=['GET'])
 def place_allamens(place_id):
     place = storage.get('Place', place_id)
