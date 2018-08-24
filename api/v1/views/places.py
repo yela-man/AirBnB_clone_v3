@@ -71,6 +71,10 @@ def places_search():
     res = []
     places = []
     amenities = []
+
+    if not request.get_json():
+        abort(400, 'Not a JSON')
+
     obj = request.get_json()
     for k, v in obj.items():
         if k == 'states':
