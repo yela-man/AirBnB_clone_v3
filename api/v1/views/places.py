@@ -104,10 +104,33 @@ def places_search():
 
     #if places is empty and amenities is not empty
     if places == [] and amenities != []:
-        return jsonify([storage.get('Amenity', id).to_dict()
-                        for id in amenities])
+        remove = []
+        res = []
+        places = [place.id for place in storage.all('Place').values()]
+        for place in places:
+            obj = storage.get('Place', place)
+            for amen in obj.amenities:
+                if amen.id not in amenities:
+                    if place not in remove:
+                        remove.append(place)
+        for place in places:
+            if place not in remove:
+                res.append(place)
+        return jsonify([storage.get('Place', obj).to_dict()
+                        for obj in res])
+
+    if amenities != []:
+        for place in places:
+            obj = storage.get('Place', place)
+            for amenity in amenities:
+                if amenity not in obj.amenities:
+                    places.remove(place)
+
+    return jsonify([storage.get('Place', id).to_dict() for id in places])
+
 
     #if places is not empty and amenities is not empty
+'''
     if amenities != []:
         remove = []
         for place in places:
@@ -118,7 +141,4 @@ def places_search():
                         remove.append(place)
 
         places = (set(places) - set(remove))
-
-
-
-    return jsonify([storage.get('Place', id).to_dict() for id in places])
+'''
