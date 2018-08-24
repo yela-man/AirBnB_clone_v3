@@ -63,10 +63,11 @@ def places(city_id):
 @app_views.route('/places_search', methods=['POST'])
 def places_search():
 
-    if not request.get_json():
+    headers = request.headers.get('Content-Type')
+    if headers != 'application/json':
         abort(400, 'Not a JSON')
 
-    if request.get_json() == []:
+    if not request.get_json():
         return jsonify([places.to_dict() for
                         places in storage.all('Place').values()])
 
