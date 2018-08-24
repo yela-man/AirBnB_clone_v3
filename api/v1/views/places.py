@@ -75,38 +75,49 @@ def places_search():
     places = []
     amenities = []
     obj = request.get_json()
+
+    #get all cities from states if states passed
     for k, v in obj.items():
         if k == 'states':
             for item in v:
                 state_obj = storage.get('State', item)
                 for city in state_obj.cities:
                     res.append(city.id)
-
+    #add cities to existing cities list after looking through states
     for k, v in obj.items():
         if k == 'cities':
             for item in v:
                 if item not in res:
                     res.append(item)
 
+    #create amenities list if amenities passed
     for k, v in obj.items():
         if k == 'amenities':
             for item in v:
                 if item not in res:
                     amenities.append(item)
+
+    #create list of place id's from all cities
     for place in storage.all('Place').values():
         if place.city_id in res:
             places.append(place.id)
 
-    if places == [] and amenities is not []:
+    #if places is empty and amenities is not empty
+    if places == [] and amenities != []:
         return jsonify([storage.get('Amenity', id).to_dict()
                         for id in amenities])
 
-    else:
+    #if places is not empty and amenities is not empty
+    if amenities != []:
+        remove = []
         for place in places:
             obj = storage.get('Place', place)
-            for amenity in amenities:
-                if amenity not in obj.amenities:
-                    places.remove(place)
+            for amen in obj.amenities:
+                if amen.id not in amenities:
+                    if place not in remove:
+                        remove.append(place)
+
+        places = (set(places) - set(remove))
 
 
 
